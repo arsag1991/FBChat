@@ -36,6 +36,7 @@ class SignInAct : AppCompatActivity() {
         }
         binding.bSignin.setOnClickListener {
             signInWithGoogle()
+            checkAuthState()
         }
     }
     private fun getClient (): GoogleSignInClient{
@@ -54,11 +55,18 @@ class SignInAct : AppCompatActivity() {
         val credential = GoogleAuthProvider.getCredential(idToken, null)
         auth.signInWithCredential(credential).addOnCompleteListener {
             if (it.isSuccessful)
-            {Toast.makeText(this, "Authentication is successful", Toast.LENGTH_SHORT).show()}
+            {Toast.makeText(this, "Authentication is successful", Toast.LENGTH_SHORT).show()
+                checkAuthState()}
             else
             {Toast.makeText(this, "Authentication error", Toast.LENGTH_SHORT).show()}
 
 
+        }
+    }
+    private fun checkAuthState(){
+        if (auth.currentUser != null) {
+            val i = Intent(this, MainActivity::class.java)
+            startActivity(i)
         }
     }
 }
